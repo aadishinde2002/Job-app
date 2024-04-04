@@ -11,7 +11,14 @@ import Jobreport from './src/screens/jobreport';
 import Subreport from './src/screens/subreport';
 const Stack = createNativeStackNavigator();
 
+
+
+
+
+
 function App() {
+
+  
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown:false}}>

@@ -3,6 +3,7 @@ import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, Touchabl
 import { useTranslation } from 'react-i18next';
 import DropDownPicker from 'react-native-dropdown-picker';
 import IonIcons from 'react-native-vector-icons/Ionicons';
+import { geocode_api_key, maps_url } from '../../api';
 
 export default function UpdateJob(props) {
   const { t } = useTranslation();

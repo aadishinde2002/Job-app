@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   View,
   FlatList,
   Modal,
+  KeyboardAvoidingView,
 } from 'react-native';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,6 +17,7 @@ import Toast from 'react-native-toast-message';
 import Voice from '@react-native-voice/voice';
 import { useTranslation } from 'react-i18next';
 import { geocode_api_key, maps_url } from '../../api';
+// import { debounce } from 'lodash'; 
 
 
 export default function Jobs(props) {
@@ -25,16 +27,53 @@ export default function Jobs(props) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState(null);
+  const [filteredJobs , setFilteredJobs] = useState()
   const { t } = useTranslation();
 
   const [isListening, setIsListening] = useState(false);
 
   useEffect(() => {
+ 
+    fetchJobs();
+
+   
+    Geolocation.getCurrentPosition(
+      position => {
+        setUserLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        });
+      },
+      error => {
+        console.error('Error getting user location:', error);
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+
+    
     Voice.onSpeechResults = onSpeechResults;
     return () => {
       Voice.destroy().then(Voice.removeAllListeners);
     };
   }, []);
+
+  // const debounceSearch = useCallback(
+  //   debounce((text) => {
+  //     setSearchQuery(text);
+  //   }, 100),
+  //   []
+  // );
+
+  // const handleSearch = (text) => {
+  //   debounceSearch(text);
+  // };
+
+  // useEffect(() => {
+  //   Voice.onSpeechResults = onSpeechResults;
+  //   return () => {
+  //     Voice.destroy().then(Voice.removeAllListeners);
+  //   };
+  // }, []);
 
   
 
@@ -45,7 +84,6 @@ export default function Jobs(props) {
         .then(data => {
           const city = data.results[0].address_components.find(component => component.types.includes('locality'));
           setUserCity(city ? city.long_name : '');
-          fetchJobs();
         }
        )
         .catch(error => {
@@ -54,22 +92,24 @@ export default function Jobs(props) {
     }    
   }, [userLocation]);
 
-  
+  // useEffect(()=>{
+  //   Geolocation.getCurrentPosition(
+  //     position => {
+  //       setUserLocation({
+  //         latitude: position.coords.latitude,
+  //         longitude: position.coords.longitude
+  //         // latitude: 18.5204303,
+  //         // longitude: 73.8567437
+  //       });
+  //     },
+  //     error => {
+  //       console.error('Error getting user location:', error);
+  //     },
+  //     { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+  //   );
+  // },[])
+
   const nearbyJobs = ()=>{
-    Geolocation.getCurrentPosition(
-      position => {
-        setUserLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-          // latitude: 18.5204303,
-          // longitude: 73.8567437
-        });
-      },
-      error => {
-        console.error('Error getting user location:', error);
-      },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
     setSearchQuery(userCity)
   }
 
@@ -138,29 +178,55 @@ export default function Jobs(props) {
     })
   };
 
+  // const nearJobs = jobs.filter(job => calculateDistance(job.location, userLocation) <= 5); // Adjust the radius as needed
+  // setFilteredJobs(nearJobs);
+
+  // const calculateDistance = (location1, location2) => {
+  //   // Calculate distance between two locations (e.g., using Haversine formula)
+  //   // This function should return the distance in kilometers
+  //   const earthRadius = 6371; // Radius of the earth in kilometers
+  //   const lat1 = location1.latitude;
+  //   const lon1 = location1.longitude;
+  //   const lat2 = location2.latitude;
+  //   const lon2 = location2.longitude;
+
+  //   const dLat = toRadians(lat2 - lat1);
+  //   const dLon = toRadians(lon2 - lon1);
+
+  //   const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+  //             Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+  //             Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  //   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  //   const distance = earthRadius * c;
+  //   return distance;
+  // };
+
+  // const toRadians = (degrees) => {
+  //   return degrees * Math.PI / 180;
+  // };
+
   
 
   useEffect(() => {
-    fetchJobs()
-    if (searchQuery.length > 8) {
-      setIsListening(false);
-    }
-  }, [jobs,searchQuery]);
+    fetchJobs();
+    setFilteredJobs(jobs);
+  }, [jobs]);
 
   useEffect(() => {
-    fetchJobs()
-    if (searchQuery.length > 8) {
-      setIsListening(false);
-    }
-  }, [jobs,searchQuery]);
-
-  let filteredJobs = jobs.filter((job) =>
-   job.title.toLowerCase().includes(searchQuery.toLowerCase()) || job.city.join(' ').toLowerCase().includes(searchQuery.toLowerCase())
-  );
+    const filterJobs = () => {
+      const filteredJobs = jobs.filter(job =>
+        job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        job.city.join(' ').toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredJobs(filteredJobs);
+    };
+  
+    filterJobs();
+  }, [searchQuery, jobs]);
 
   return (
   
-    
+    <KeyboardAvoidingView  style={{ flex: 1 }} behavior="padding">
     <View style={{ backgroundColor: '#8597be' }}>
       <View style={{ flexDirection: 'row' }}>
         <TextInput
@@ -190,8 +256,9 @@ export default function Jobs(props) {
           <IonIcons name="location-outline" color="white" size={25} />
           <Text style={{ color: 'white', fontWeight: 'bold',fontSize:18}}>{t('Search nearby jobs')}</Text>
       </TouchableOpacity>
+      
       <FlatList
-        style={{ marginBottom: 70, minHeight: 700 }}
+        style={{ marginBottom:80 ,minHeight: 700 }}
         data={filteredJobs}
         renderItem={({ item }) => (
           <View style={styles.card}>
@@ -232,6 +299,7 @@ export default function Jobs(props) {
           </View>
         )}
         keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 40}}
       />
       {/* Modal for delete confirmation */}
       <Modal
@@ -264,6 +332,7 @@ export default function Jobs(props) {
       </Modal>
       <Toast/>
     </View>
+    </KeyboardAvoidingView>
   );
 }
 
