@@ -9,16 +9,59 @@ import BottomNav from './src/navigations/BottomNav';
 import UpdateJob from './src/screens/Udjob';
 import Jobreport from './src/screens/jobreport';
 import Subreport from './src/screens/subreport';
+import { useEffect } from 'react';
+import messaging from '@react-native-firebase/messaging'
+import { Alert } from 'react-native';
+import PushNotification from 'react-native-push-notification';
+
 const Stack = createNativeStackNavigator();
 
+PushNotification.configure({
+  onRegister: function (token) {
+    console.log("TOKEN:", token);
+  },
+  onNotification: function (notification) {
+    console.log("NOTIFICATION:", notification);
+  },
 
+  onAction: function (notification) {
+    console.log("ACTION:", notification.action);
+    console.log("NOTIFICATION:", notification);
+  },
 
+  onRegistrationError: function(err) {
+    console.error(err.message, err);
+  },
 
+  permissions: {
+    alert: true,
+    badge: true,
+    sound: true,
+  },
+
+  popInitialNotification: true,
+  requestPermissions: true,
+});
 
 
 function App() {
-
+  useEffect(()=>{
+    tokencall()
+  })
+  const tokencall = async()=>{
+    let token = await messaging().getToken();
+    console.log(token)
+  }
   
+    useEffect(() => {
+      const unsubscribe = messaging().onMessage(async remoteMessage => {
+        Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      });
+  
+      return unsubscribe;
+    }, []);
+  
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown:false}}>
