@@ -13,6 +13,8 @@ import { useEffect } from 'react';
 import messaging from '@react-native-firebase/messaging'
 import { Alert } from 'react-native';
 import PushNotification from 'react-native-push-notification';
+// import { initializeDatabase } from './src/database/database';
+import { database } from './src/database/database';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,11 +48,30 @@ PushNotification.configure({
 
 function App() {
   useEffect(()=>{
-    tokencall()
+    tokencall() 
+    getdata() 
+    
   })
+
+  // useEffect(()=> {
+  //   initializeDatabase()
+  //   .then(() => {
+  //     console.log('initialized succcsessfully')
+  //   })
+  //   .catch(error => {
+  //     console.log('Error initializing database:', error);
+  //   });
+  // })
+  const getdata=async()=>{
+    const databasecall = await database.collections.get('profiledata')
+    
+    const final = await databasecall.table
+    console.log(final)
+   }
+
   const tokencall = async()=>{
     let token = await messaging().getToken();
-    console.log(token)
+    console.log(token) 
   }
   
     useEffect(() => {

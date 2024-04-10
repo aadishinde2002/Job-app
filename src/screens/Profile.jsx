@@ -14,9 +14,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ImagePicker from 'react-native-image-crop-picker';
 import Toast from 'react-native-toast-message';
 import {useTranslation} from 'react-i18next';
-import i18n from '../components/i18n';
 import {RadioButton} from 'react-native-paper';
 import {getLocales} from 'react-native-localize';
+import  { database }  from '../database/database';
+import NetInfo from '@react-native-community/netinfo';
+
+
 
 
 export default function Profile() {
@@ -31,12 +34,23 @@ export default function Profile() {
   const [modalVisible, setModalVisible] = useState(false);
   const [secondmodal, setsecondmodal] = useState(false);
   const {t, i18n: translation} = useTranslation();
+  const {db, setDb} = useState('');
 
   const changeLanguage = async lng => {
     try {
       translation.changeLanguage(lng);
     } catch (error) {
       console.error('Error setting language:', error);
+    }
+  };
+
+  const checkNetworkStatus = async () => {
+    try {
+      const state = await NetInfo.fetch();
+      return state.isConnected;
+    } catch (error) {
+      console.error('Error checking network status:', error);
+      return false;
     }
   };
 
@@ -90,23 +104,133 @@ export default function Profile() {
     });
   };
 
+  // const fetchData = async () => {
+  //   try {
+  //     const url = 'http://10.0.2.2:3000/users/f4cc';
+  //     const resp = await fetch(url);
+  //     const result = await resp.json();
+  //     setName(result.fname);
+  //     setLname(result.lname);
+  //     setEmail(result.email);
+  //     setProfile(result.profile);
+  //   } catch (err) {
+  //     console.warn('There was an error fetching data:', err);
+  //   }
+  // };
+
   const fetchData = async () => {
     try {
-      const url = 'http://10.0.2.2:3000/users/f4cc';
-      const resp = await fetch(url);
-      const result = await resp.json();
+      const isConnected = await checkNetworkStatus();
+      let result;
+      if (isConnected) {
+        const url = 'http://10.0.2.2:3000/users/f4cc';
+        const resp = await fetch(url);
+        result = await resp.json();
+        await saveProfileToLocalDatabase(result);
+      } else {
+        console.log('offline')
+        const profileModel = await database.get('profiledata');
+        const profileRecord = await database.query(profileModel).fetch();
+        result = {
+          fname: profileRecord.name,
+          lname: profileRecord.lname,
+          email: profileRecord.email,
+          profile: profileRecord.profile,
+        };
+      }
+  
       setName(result.fname);
       setLname(result.lname);
       setEmail(result.email);
-      setProfile(result.profile);
-    } catch (err) {
-      console.warn('There was an error fetching data:', err);
+      setProfile(result.profile);  
+    } catch (error) {
+      console.warn('There was an error fetching data:', error);
     }
   };
 
+  const getdata = async () => {
+    try {
+      const databasecall = await database.collections.get('profiledata');
+      await databasecall.query().observe().forEach(item => {
+        console.log(item);
+      });
+
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  
+
+  const eraseAllData = async () => {
+    try {
+      const profiles = await database.collections.get('profiledata'); 
+      const allProfiles = await profiles.query().fetch(); 
+      await database.write(async () => {
+        await Promise.all(allProfiles.map(profile => profile.destroyPermanently())); 
+      });
+      console.log('All data erased from the database');
+    } catch (error) {
+      console.error('Error erasing data from the database:', error);
+    }
+  };
+
+// const saveProfileToLocalDatabase = async (result) => {
+//   try {
+//     await database.write(async () => {
+//       const profileModel = await database.get('profiledata');
+//       if (profileModel) {
+//         await profileModel.create(table => {
+//           table.name = result.name;
+//           table.lname = result.lname;
+//           table.email = result.email;
+//           table.profile = result.profile;
+//         });
+//       } else {
+//         console.error('Profile model not found'); 
+//     }
+//     })
+//   } catch (error) {
+//     console.error('Error saving profile to local database:', error);
+//   }
+// };
+
+const saveProfileToLocalDatabase = async (result) => {
+  try {
+    await database.write(async () => {
+      const profiles = await database.collections.get('profiledata'); 
+      const profile = await profiles.query().fetch(); 
+      if (profile.length > 0) {
+        await profile[0].update(updatedProfile => {
+          updatedProfile.name = result.name;
+          updatedProfile.lname = result.lname;
+          updatedProfile.email = result.email;
+          updatedProfile.profile = result.profile;
+        });
+      } else {
+        await profiles.create(table => {
+          table.name = result.name;
+          table.lname = result.lname;
+          table.email = result.email;
+          table.profile = result.profile;
+         });
+      }
+    });
+    console.log('Profile updated successfully');
+  } catch (error) {
+    console.error('Error saving profile to local database:', error);
+  }
+};
+
+
+//  useEffect(()=>{
+//   getdata()
+//  },[])
+
   useEffect(() => {
     fetchData();
+    getdata();
   }, []);
+
 
   const modalclose = () => {
     setModalVisible(false);
@@ -360,7 +484,8 @@ export default function Profile() {
                   gap: 40,
                   justifyContent: 'start',
                   marginTop: 15,
-                }}>
+                }}
+                onPress={eraseAllData}>
                 <View
                   style={{
                     backgroundColor: '#5d74a8',

@@ -11,7 +11,10 @@
   },
   "dependencies": {
     "@notifee/react-native": "^7.8.2",
+    "@nozbe/watermelondb": "^0.27.1",
+    "@nozbe/with-observables": "^1.6.0",
     "@react-native-community/geolocation": "^3.2.1",
+    "@react-native-community/netinfo": "^11.3.1",
     "@react-native-firebase/app": "^19.1.2",
     "@react-native-firebase/messaging": "^19.1.2",
     "@react-native-voice/voice": "^3.2.4",
@@ -43,6 +46,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@babel/plugin-proposal-decorators": "^7.24.1",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@react-native/babel-preset": "0.73.21",
