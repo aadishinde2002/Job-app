@@ -1,0 +1,214 @@
+{
+  "jobs": [
+    {
+      "title": "Network Administrator",
+      "description": "Donec ornare, est vitae sagittis tincidunt, sem nulla volutpat nisi, a facilisis nisi ante id enim.",
+      "city": [
+        "Pune",
+        "Kolhapur"
+      ],
+      "coordinates": {
+        "latitude": 16.7049873,
+        "longitude": 74.24325270000001
+      },
+      "occupations": [
+        "Bca",
+        "BTech"
+      ],
+      "id": "5"
+    },
+    {
+      "id": "9b97",
+      "title": "kasjdoias",
+      "description": "iosjaiojfafa",
+      "city": [
+        "Sangli"
+      ],
+      "coordinates": {
+        "latitude": 16.8523973,
+        "longitude": 74.5814773
+      },
+      "occupations": [
+        "BE"
+      ]
+    }
+  ],
+  "circledata": [
+    {
+      "name": "kolhapur",
+      "population": 1550000,
+      "color": "#010509",
+      "legendFontColor": "#cccccc",
+      "legendFontSize": 15,
+      "id": "f7d4"
+    },
+    {
+      "name": "sangli",
+      "population": 2800000,
+      "color": "rgba(131, 167, 234, 1)",
+      "legendFontColor": "#cccccc",
+      "legendFontSize": 15,
+      "id": "f9d9"
+    },
+    {
+      "name": "pune",
+      "population": 5276102,
+      "color": "#8597ac",
+      "legendFontColor": "#cccccc",
+      "legendFontSize": 15,
+      "id": "7e16"
+    },
+    {
+      "name": "mumbai",
+      "population": 8538000,
+      "color": "#3c587a",
+      "legendFontColor": "#cccccc",
+      "legendFontSize": 15,
+      "id": "87ce"
+    },
+    {
+      "name": "banglore",
+      "population": 11920000,
+      "color": "#23436a",
+      "legendFontColor": "#cccccc",
+      "legendFontSize": 15,
+      "id": "2455"
+    }
+  ],
+  "commitdata": [
+    {
+      "date": "2023-01-02",
+      "count": 1,
+      "id": "d5bf"
+    },
+    {
+      "date": "2023-01-03",
+      "count": 2,
+      "id": "a838"
+    },
+    {
+      "date": "2023-01-04",
+      "count": 3,
+      "id": "267c"
+    },
+    {
+      "date": "2023-01-05",
+      "count": 4,
+      "id": "f1b1"
+    },
+    {
+      "date": "2023-01-06",
+      "count": 5,
+      "id": "2edd"
+    },
+    {
+      "date": "2023-01-30",
+      "count": 2,
+      "id": "787a"
+    },
+    {
+      "date": "2023-01-31",
+      "count": 3,
+      "id": "ab4c"
+    },
+    {
+      "date": "2023-03-01",
+      "count": 2,
+      "id": "ca9e"
+    },
+    {
+      "date": "2023-04-02",
+      "count": 4,
+      "id": "617f"
+    },
+    {
+      "date": "2023-03-05",
+      "count": 2,
+      "id": "b427"
+    },
+    {
+      "date": "2023-02-30",
+      "count": 4,
+      "id": "7de0"
+    }
+  ],
+  "linedata": [
+    {
+      "labels": [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June"
+      ],
+      "datasets": [
+        {
+          "data": [
+            20,
+            45,
+            28,
+            80,
+            99,
+            100
+          ]
+        }
+      ],
+      "id": "c698"
+    }
+  ],
+  "users": [
+    {
+      "fname": "Aditya",
+      "lname": "Shinde",
+      "profile": "file:///storage/emulated/0/Android/data/com.weatherapp/files/Pictures/21828dde-1b2e-4755-a6bf-6acb93f38017.jpg",
+      "email": "xyz@gmail.com",
+      "password": "helloworld",
+      "id": "f4cc"
+    }
+  ],
+  "items": [
+    {
+      "key": 1,
+      "name": "Mumbai",
+      "Applications": 356,
+      "Selected": 16,
+      "id": "a319"
+    },
+    {
+      "key": 2,
+      "name": "Kolhapur",
+      "Applications": 266,
+      "Selected": 16,
+      "id": "3b8f"
+    },
+    {
+      "key": 3,
+      "name": "Pune",
+      "Applications": 56,
+      "Selected": 6,
+      "id": "e3a5"
+    },
+    {
+      "key": 4,
+      "name": "Benglore",
+      "Applications": 456,
+      "Selected": 167,
+      "id": "fa59"
+    }
+  ],
+  "user": [
+    {
+      "id": "64b2",
+      "name": "Aditya Shinde",
+      "address": "kasaba bawada",
+      "gender": "male",
+      "dob": "2 june",
+      "phone": "8484854545",
+      "country": "india",
+      "state": "maharashtra",
+      "city": "kolhapur",
+      "pincode": "415407"
+    }
+  ]
+}

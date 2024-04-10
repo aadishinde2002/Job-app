@@ -6,13 +6,13 @@ import { getLocales } from 'react-native-localize';
 const logo = require('../assets/images/logo.png')
 
 const Home = (props) => {
-  const {t, i18n: translation} = useTranslation();
+  const {t, i18n} = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState(getLocales()[0].languageCode);
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
 
-  const changeLanguage = async lng => {
+  const homechangeLanguage = async (lng) => {
     try {
-      translation.changeLanguage(lng);
+      i18n.changeLanguage(lng);
     } catch (error) {
       console.error('Error setting language:', error);
     }
@@ -31,7 +31,7 @@ const Home = (props) => {
             <Text style={styles.languageButton}>{t('Select Language')}</Text>
             <RadioButton.Group
               onValueChange={value => {
-                changeLanguage(value);
+                homechangeLanguage(value);
                 setSelectedLanguage(value);
                 setLanguageModalVisible(false);
               }}

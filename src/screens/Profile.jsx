@@ -33,12 +33,12 @@ export default function Profile() {
   const [email, setEmail] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [secondmodal, setsecondmodal] = useState(false);
-  const {t, i18n: translation} = useTranslation();
+  const {t, i18n} = useTranslation();
   const {db, setDb} = useState('');
 
-  const changeLanguage = async lng => {
+  const changeLanguage = async (lng)=> {
     try {
-      translation.changeLanguage(lng);
+      i18n.changeLanguage(lng);
     } catch (error) {
       console.error('Error setting language:', error);
     }

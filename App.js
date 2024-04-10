@@ -15,6 +15,7 @@ import { Alert } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 // import { initializeDatabase } from './src/database/database';
 import { database } from './src/database/database';
+import i18n from './src/components/i18n';
 
 const Stack = createNativeStackNavigator();
 
