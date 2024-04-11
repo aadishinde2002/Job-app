@@ -63,7 +63,7 @@ export default function Profile() {
     try {
       const state = await NetInfo.fetch();
       const status = await state.isConnected
-      setisconnected(status)
+      await setisconnected(status)
     } catch (error) {
       console.error('Error checking network status:', error);
       return false;
