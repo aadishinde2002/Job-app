@@ -36,7 +36,8 @@ export default function Profile() {
   const [modalVisible, setModalVisible] = useState(false);
   const [secondmodal, setsecondmodal] = useState(false);
   const {t, i18n} = useTranslation();
-  const {db, setDb} = useState('');
+  const [isConnected, setisconnected] = useState(false);
+
 
   const changeLanguage = async (lng)=> {
     try {
@@ -61,12 +62,19 @@ export default function Profile() {
   const checkNetworkStatus = async () => {
     try {
       const state = await NetInfo.fetch();
-      return state.isConnected;
+      const status = await state.isConnected
+      setisconnected(status)
     } catch (error) {
       console.error('Error checking network status:', error);
       return false;
     }
+    
   };
+
+
+  useEffect(()=>{
+    checkNetworkStatus()
+  })
 
   const updateProfile = async () => {
     try {
@@ -134,7 +142,8 @@ export default function Profile() {
 
   const fetchData = async () => {
     try {
-      const isConnected = await checkNetworkStatus();
+      // const isConnected = await checkNetworkStatus();
+      console.log(isConnected)
       let result;
       if (isConnected) {
         const url = 'http://10.0.2.2:3000/users/f4cc';
@@ -216,14 +225,14 @@ const saveProfileToLocalDatabase = async (result) => {
       const profile = await profiles.query().fetch(); 
       if (profile.length > 0) {
         await profile[0].update(updatedProfile => {
-          updatedProfile.name = result.name;
+          updatedProfile.name = result.fname;
           updatedProfile.lname = result.lname;
           updatedProfile.email = result.email;
           updatedProfile.profile = result.profile;
         });
       } else {
         await profiles.create(table => {
-          table.name = result.name;
+          table.name = result.fname;
           table.lname = result.lname;
           table.email = result.email;
           table.profile = result.profile;
