@@ -144,12 +144,13 @@ export default function Profile() {
       } else {
         console.log('offline')
         const profileModel = await database.get('profiledata');
-        const profileRecord = await database.query(profileModel).fetch();
+        const profileRecord = await profileModel.query().fetch();
+
         result = {
-          fname: profileRecord.name,
-          lname: profileRecord.lname,
-          email: profileRecord.email,
-          profile: profileRecord.profile,
+          fname: profileRecord[0].name,
+          lname: profileRecord[0].lname,
+          email: profileRecord[0].email,
+          profile: profileRecord[0].profile,
         };
       }
   
