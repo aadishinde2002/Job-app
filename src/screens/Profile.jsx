@@ -18,6 +18,8 @@ import {RadioButton} from 'react-native-paper';
 import {getLocales} from 'react-native-localize';
 import  { database }  from '../database/database';
 import NetInfo from '@react-native-community/netinfo';
+import Share from 'react-native-share';
+import { resume } from '../../api';
 
 
 
@@ -43,6 +45,18 @@ export default function Profile() {
       console.error('Error setting language:', error);
     }
   };
+
+ const resumeshare = async()=>{
+  const sharefile = {
+    message: 'This is my resume',
+    url: resume
+  }
+  try {
+    const ShareResponse = await Share.open(sharefile)
+  } catch (error) {
+    console.log('error in sharing',error)
+  }
+ }
 
   const checkNetworkStatus = async () => {
     try {
@@ -461,6 +475,7 @@ const saveProfileToLocalDatabase = async (result) => {
                   justifyContent: 'start',
                   marginTop: 15,
                 }}
+                onPress={resumeshare}
                 >
                 <View
                   style={{
@@ -472,7 +487,7 @@ const saveProfileToLocalDatabase = async (result) => {
                 </View>
                 <Text
                   style={{color: 'black', fontWeight: 'bold', fontSize: 25}}>
-                  {t('payment')}
+                  {t('shareresume')}
                 </Text>
               </TouchableOpacity>
             </View>

@@ -9,7 +9,6 @@ i18n.use(initReactI18next).init({
     en: {
       translation: {
         dashboard: 'Dashboard',
-        payment: 'Payment History',
         statistics: 'Statistics',
         password: 'Password',
         logout: 'Logout',
@@ -85,7 +84,7 @@ i18n.use(initReactI18next).init({
         Update: 'Update',
         Close: 'Close',
         dashboard: 'Dashboard',
-        payment: 'Payment',
+        shareresume: 'Share Resume',
         statistics: 'Statistics',
         password: 'Password',
         logout: 'Logout',
@@ -98,7 +97,6 @@ i18n.use(initReactI18next).init({
     hi: {
       translation: {
         dashboard: 'डैशबोर्ड',
-        payment: 'भुगतान इतिहास',
         statistics: 'आंकड़े',
         password: 'पासवर्ड',
         logout: 'लॉग आउट',
@@ -173,7 +171,7 @@ i18n.use(initReactI18next).init({
         Update: 'अपडेट',
         Close: 'बंद करे',
         dashboard: 'डैशबोर्ड',
-        payment: 'भुगतान',
+        shareresume: 'बायोडाटा साझा करें',
         statistics: 'सांख्यिकी',
         password: 'पासवर्ड',
         logout: 'लोग आउट',
@@ -186,7 +184,6 @@ i18n.use(initReactI18next).init({
     mar: {
       translation: {
         dashboard: 'डॅशबोर्ड',
-        payment: 'पेमेंट इतिहास',
         statistics: 'आकडेवारी',
         password: 'पासवर्ड',
         logout: 'बाहेर पडणे',
@@ -261,7 +258,7 @@ i18n.use(initReactI18next).init({
         Update: 'अपडेट',
         Close: 'बंद करा',
         dashboard: 'डॅशबोर्ड',
-        payment: 'पेमेंट',
+        shareresume: 'शेअर रेझ्युमे',
         statistics: 'सांख्यिकी',
         password: 'पासवर्ड',
         logout: 'लॉग आऊट',
