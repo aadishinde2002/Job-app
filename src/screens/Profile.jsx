@@ -74,7 +74,7 @@ export default function Profile() {
 
   useEffect(()=>{
     checkNetworkStatus()
-  })
+  },[isConnected])
 
   const updateProfile = async () => {
     try {
@@ -92,6 +92,7 @@ export default function Profile() {
       });
       if (response.ok) {
         setModalVisible(false);
+        fetchData();
         Toast.show({
           type: 'success',
           text1: 'Updated SuccessFully',
@@ -149,7 +150,6 @@ export default function Profile() {
         const url = 'http://10.0.2.2:3000/users/f4cc';
         const resp = await fetch(url);
         result = await resp.json();
-        await saveProfileToLocalDatabase(result);
       } else {
         console.log('offline')
         const profileModel = await database.get('profiledata');
@@ -167,6 +167,8 @@ export default function Profile() {
       setLname(result.lname);
       setEmail(result.email);
       setProfile(result.profile);  
+      await saveProfileToLocalDatabase(result);
+      await getdata()
     } catch (error) {
       console.warn('There was an error fetching data:', error);
     }
@@ -252,13 +254,12 @@ const saveProfileToLocalDatabase = async (result) => {
 
   useEffect(() => {
     fetchData();
-    getdata();
   }, []);
 
 
-  const modalclose = () => {
-    setModalVisible(false);
-    fetchData();
+  const modalclose = async() => {
+     setModalVisible(false);
+    await fetchData()
   };
 
   return (
