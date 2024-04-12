@@ -59,17 +59,57 @@ export default function Profile() {
   }
  }
 
+ const syncOfflineDataWithServer = async () => {
+  if (isConnected){
+    console.log('started data synchronizing')
+  try {
+    const profiles = await database.collections.get('profiledata');
+    const offlineProfiles = await profiles.query().fetch();
+    if (offlineProfiles[0].name.length > 0) {
+          console.log(offlineProfiles)
+          const response = await fetch('http://10.0.2.2:3000/users/f4cc', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              fname: offlineProfiles[0].name,
+              lname: offlineProfiles[0].lname,
+              email: offlineProfiles[0].email,
+              // profile: offlineProfiles[0].profile,
+            }),
+          });
+          if (response.ok) {
+            console.log('synchronized successfully')
+          } else {
+            console.error('Error uploading offline profile:', response.status);
+          }
+    }else{
+      fetchData()
+    }
+  } catch (error) {
+    console.error('Error syncing offline data with server:', error);
+  }
+  fetchData()
+}else{
+  fetchData()
+}
+};
+
+
+
   const checkNetworkStatus = async () => {
     try {
       const state = await NetInfo.fetch();
-      const status = await state.isConnected
-      await setisconnected(status)
+      setisconnected(state.isConnected) 
+       if (state.isConnected) {
+       await syncOfflineDataWithServer()
+       }
     } catch (error) {
       console.error('Error checking network status:', error);
-      return false;
-    }
-    
+    } 
   };
+
 
 
   useEffect(()=>{
@@ -77,6 +117,7 @@ export default function Profile() {
   },[isConnected])
 
   const updateProfile = async () => {
+    if(isConnected){
     try {
       const response = await fetch('http://10.0.2.2:3000/users/f4cc', {
         method: 'PATCH',
@@ -101,8 +142,40 @@ export default function Profile() {
         console.error('Error updating profile');
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error('Error updating profile online:', error);
     }
+  }else{
+    try {
+      await database.write(async () => {
+        const profiles = await database.collections.get('profiledata'); 
+        const profile = await profiles.query().fetch(); 
+        if (profile.length > 0) {
+          await profile[0].update(updatedProfile => {
+            updatedProfile.name = name;
+            updatedProfile.lname = lname;
+            updatedProfile.email = email;
+            updatedProfile.profile = profile;
+          });
+        } else {
+          await profiles.create(table => {
+            table.name = name;
+            table.lname = lname;
+            table.email = email;
+            table.profile = profile;
+           });
+        }
+      });
+      console.log('Profile updated offline successfully');
+      setModalVisible(false);
+      Toast.show({
+        type: 'success',
+        text1: 'Updated offline SuccessFully',
+      });
+      getdata();
+    } catch (error) {
+      console.error('Error saving profile to local database:', error);
+    }
+  }
   };
 
   const cameraimg = () => {
@@ -252,14 +325,14 @@ const saveProfileToLocalDatabase = async (result) => {
 //   getdata()
 //  },[])
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
 
   const modalclose = async() => {
      setModalVisible(false);
-    await fetchData()
+     await fetchData()
   };
 
   return (
