@@ -1,79 +1,64 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+Project Title:
 
-# Getting Started
+React Native JobApp
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+Description:
 
-## Step 1: Start the Metro Server
+This is a mobile application built using React Native for job seekers. The app includes features such as user authentication, navigation, profile management, job listings, CRUD operations on jobs, filtration options, multilanguage support, dynamic charts, PDF download functionality, resume sharing, offline support, and synchronization between local and online databases.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+Features:
 
-To start Metro, run the following command from the _root_ of your React Native project:
+Authentication:
 
-```bash
-# using npm
-npm start
+Home, Login, and Signup screens with local validations for email and password inputs.
+Navigation:
 
-# OR using Yarn
-yarn start
-```
+Utilizes stack and bottom tab navigation for seamless navigation between screens.
+Screens:
 
-## Step 2: Start your Application
+Profile: Allows users to view and edit their profile information.
+Dashboard: Provides an overview of job statistics and trends.
+Jobs: Displays a list of available jobs with CRUD operations.
+Report: Generates job reports with dynamic charts and pie charts.
+Notifications: Sends notifications using Firebase and local notifications.
+Job Filtering:
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+Enables users to filter jobs by various criteria, including keyword search, location, and voice search.
+Multilanguage Support:
 
-### For Android
+Supports English, Hindi, and Marathi languages for a wider user base.
+PDF Download:
 
-```bash
-# using npm
-npm run android
+Allows users to download job reports in PDF format for offline viewing.
+Resume Sharing:
 
-# OR using Yarn
-yarn android
-```
+Integration with local apps like Gmail and WhatsApp for sharing resumes.
+Offline Support:
 
-### For iOS
+Stores profile data locally using WatermelonDB for offline access.
+Synchronization:
 
-```bash
-# using npm
-npm run ios
+Automatically synchronizes and updates data between the local WatermelonDB and the online database when the app goes online.
+Usage:
 
-# OR using Yarn
-yarn ios
-```
+Clone the repository: git clone https://github.com/aadishinde2002/Job-app
+Install dependencies: npm install
+Run the app: npm start
+Contributing:
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+Contributions are welcome! Please fork the repository and submit a pull request with your enhancements.
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+License:
 
-## Step 3: Modifying your App
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-Now that you have successfully run the app, let's modify it.
+Acknowledgements:
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+React Native
+Firebase
+WatermelonDB
+React Navigation
+React Native Chart Kit
+Contact:
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+For any inquiries or support, please contact [aadishinde2002@gmail.com].
