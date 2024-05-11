@@ -2,6 +2,11 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import { useTranslation } from 'react-i18next';
+import ExcelJS from 'exceljs';
+import RNFS from 'react-native-fs';
+import { Buffer } from 'buffer';
+
+
 
 export default function Reports(props) {
   const [items, setItems] = useState([]);
@@ -27,7 +32,7 @@ export default function Reports(props) {
     let options = {
       html: htmlContent,
       fileName: 'Reports',
-      directory: 'Documents',
+      directory: RNFS.DocumentDirectoryPath,
     };
 
     try {
@@ -84,6 +89,45 @@ export default function Reports(props) {
       </html>`;
   };
 
+  const generateShareableExcel = async () => {
+    const now = new Date();
+    const fileName = 'YourFilename.xlsx';
+    const fileUri = `${RNFS.DownloadDirectoryPath}/${fileName}`;
+    
+    try {
+      const workbook = new ExcelJS.Workbook();
+      workbook.creator = 'Me';
+      workbook.created = now;
+      workbook.modified = now;
+      const worksheet = workbook.addWorksheet('My Sheet', {});
+      worksheet.columns = [
+        { header: 'Id', key: 'id', width: 10 },
+        { header: 'Name', key: 'name', width: 32 },
+        { header: 'D.O.B.', key: 'dob', width: 10 },
+      ];
+      worksheet.addRow({ id: 1, name: 'John Doe', dob: new Date(1970, 1, 1) });
+      worksheet.addRow({ id: 2, name: 'Jane Doe', dob: new Date(1969, 2, 3) });
+  
+      const buffer = await workbook.xlsx.writeBuffer();
+      const nodeBuffer = Buffer.from(buffer);
+      const bufferStr = nodeBuffer.toString('base64');
+      await RNFS.writeFile(fileUri, bufferStr, 'base64');
+  
+      console.log('File saved successfully:', fileUri);
+      return fileUri;
+    } catch (error) {
+      console.error('Error generating or saving Excel file:', error);
+      throw error;
+    }
+  };
+  
+  
+
+    const path = `${RNFS.DocumentDirectoryPath}/my_excel_file.xlsx`;
+    
+
+
+
   return (
     <View style={{ justifyContent: 'center', alignItems: 'center' ,backgroundColor:'#3c587a'}}>
       <View style={{ padding: 20 ,alignItems:'center',backgroundColor:'#9dabbd',borderRadius:50,borderRadius:30,marginTop:'1%'}}>
@@ -103,7 +147,8 @@ export default function Reports(props) {
             {t("Download Pdf")}
           </Text> 
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnup}>
+        <TouchableOpacity style={styles.btnup} onPress={generateShareableExcel}
+        >
           <Text style={{color:'black',fontSize:20, fontWeight:'bold'}}>
            {t("Download Excel")}
           </Text>
@@ -127,7 +172,7 @@ export default function Reports(props) {
           {t("Download Pdf")}
           </Text> 
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnup}>
+        <TouchableOpacity style={styles.btnup} onPress={generateShareableExcel}>
           <Text style={{color:'black',fontSize:20,fontWeight:'bold'}}>
             {t("Download Excel")}
           </Text>
